@@ -1,6 +1,6 @@
 local RunService = game:GetService("RunService")
-local Gui = game.CoreGui:FindFirstChild("ScreenGui")
 
+local Gui = game.CoreGui:FindFirstChild("ScreenGui")
 if Gui then
     Gui:Destroy()
 end
@@ -24,36 +24,6 @@ Frame.Size = UDim2.new(0, 283, 0, 106)
 Frame.Visible = true
 UICORNER1.Parent = Frame
 
-local UIS = game:GetService("UserInputService")
-local frame = Frame
-local dragToggle = false
-local dragStart, startPos
-
-local function updateInput(input)
-    local delta = input.Position - dragStart
-    local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    game:GetService("TweenService"):Create(frame, TweenInfo.new(0.25), {Position = position}):Play()
-end
-
-frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then 
-        dragToggle = true
-        dragStart = input.Position
-        startPos = frame.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragToggle = false
-            end
-        end)
-    end
-end)
-
-UIS.InputChanged:Connect(function(input)
-    if dragToggle and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        updateInput(input)
-    end
-end)
-
 Mode.Name = "Mode"
 Mode.Parent = Frame
 Mode.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
@@ -65,34 +35,47 @@ Mode.TextColor3 = Color3.fromRGB(0, 0, 0)
 Mode.TextScaled = true
 UICORNER11.Parent = Mode
 
+-- Lista trybów, które mają być wykrywane
+local modeNames = {
+    "BlueMoon", "BloodHour", "BlackoutHour", "BloodNight", "BruhHour", "CHAOS_RESTRICTED_MODE",
+    "CalamityPhase2", "CalamityPhase3", "CalamityStart", "CorruptedHourPhase2", "DeepwaterPerdition",
+    "FinalHour", "FrozenDeath", "GlitchHour", "GlitchHourPhase2", "IceAge", "NightmareHour",
+    "PureInsanity", "ShadowHour", "ShadowHourPhase2", "VisionHour", "VoidHour", "Thalassophobia",
+    "TripleSix", "CorruptedHour", "BozosHour", "InfernoHour", "LowtiergodHour", "MeltdownHour",
+    "Insomnia", "SkyfallHour", "Thalassophobia", "oldBN", "RealityIndignation", "CarnageHour"
+}
+
 local function checkGameMode()
     if not workspace:FindFirstChild("Rake") then
         Mode.Text = "MODE: None"
         return
     end
 
-    local foundHour = false
-    local hourScriptName = nil
+    local foundMode = false
+    local detectedMode = nil
 
     for _, v in ipairs(workspace.Rake:GetChildren()) do
         if v:IsA("Script") and not v.Disabled then
-            if v.Name:match("Hour") or v.Name:match("Mode") or v.Name:match("Night") then
-                foundHour = true
-                hourScriptName = v.Name
-                break
+            for _, mode in ipairs(modeNames) do
+                if string.match(v.Name, mode) then
+                    foundMode = true
+                    detectedMode = v.Name
+                    break
+                end
             end
         end
+        if foundMode then break end
     end
 
-    if foundHour and hourScriptName then
-        hourScriptName = hourScriptName:gsub("HourMain", " Hour")
-        hourScriptName = hourScriptName:gsub("ModeMain", " Mode")
-        hourScriptName = hourScriptName:gsub("NightMain", " Night")
-        hourScriptName = hourScriptName:gsub("Main", " Hour")
-        Mode.Text = "MODE: " .. hourScriptName
+    if foundMode and detectedMode then
+        detectedMode = detectedMode:gsub("HourMain", " Hour")
+        detectedMode = detectedMode:gsub("ModeMain", " Mode")
+        detectedMode = detectedMode:gsub("NightMain", " Night")
+        detectedMode = detectedMode:gsub("Main", " Hour")
+        Mode.Text = "MODE: " .. detectedMode
     else
         Mode.Text = "MODE: None"
     end
 end
 
-RunService.Heartbeat:Connect(checkGameMode) -- Sprawdza tryb gry w każdej klatce, zamiast pętli
+RunService.Heartbeat:Connect(checkGameMode)
