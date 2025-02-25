@@ -10,6 +10,7 @@ local files = {
     "rake heal.lua",
     "therake.lua",
     "tower of hell.lua",
+    "wytrzymaj.lua",
     "wstrząs.lua"
 }
 
