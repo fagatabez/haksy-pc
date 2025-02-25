@@ -1,7 +1,7 @@
 local files = {
     "auto clicker.lua",
     "czasomierz.lua",
-    "dec.lua",
+    "fogrem.lua",
     "esp.lua",
     "fast kill.lua",
     "ilość staminy.lua",
