@@ -20,7 +20,7 @@ local function createGameTimerGui()
     screenGui.Name = "GameTimerGui"
     screenGui.Parent = player:WaitForChild("PlayerGui")
 
-    local frame = Instance.new("Frame", screenGui)
+    local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 200, 0, 50)
     frame.Position = UDim2.new(0.5, -100, 0, 20)
     frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -28,13 +28,15 @@ local function createGameTimerGui()
     frame.BorderSizePixel = 1
     frame.Active = true
     frame.Draggable = true
+    frame.Parent = screenGui
 
-    local timerLabel = Instance.new("TextLabel", frame)
+    local timerLabel = Instance.new("TextLabel")
     timerLabel.Size = UDim2.new(1, 0, 1, 0)
     timerLabel.TextSize = 24
     timerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     timerLabel.BackgroundTransparency = 1
     timerLabel.Text = "Czas: --"
+    timerLabel.Parent = frame
 
     return timerLabel
 end
@@ -50,26 +52,30 @@ local function monitorGameTimer()
         return
     end
 
-    while true do
+    gameTimer:GetPropertyChangedSignal("Value"):Connect(function()
         timerLabel.Text = "Czas: " .. math.max(0, gameTimer.Value) .. " s"
-        task.wait(1)
-    end
+    end)
+    timerLabel.Text = "Czas: " .. math.max(0, gameTimer.Value) .. " s"
 end
 
 -- Funkcja do monitorowania obecności Rake
 local function monitorRake()
+    local rakeDetected = false
+    
     while true do
         local rake = Workspace:FindFirstChild("Rake")
-        if rake then
-            print("Rake jest obecny.")
-        else
-            print("Rake został usunięty. Oczekiwanie na jego powrót...")
+        if rake and not rakeDetected then
+            
+            rakeDetected = true
+        elseif not rake and rakeDetected then
+            
             repeat
                 task.wait(1)
             until Workspace:FindFirstChild("Rake")
-            print("Rake pojawił się ponownie.")
+            
+            rakeDetected = false
         end
-        task.wait(0.1)
+        task.wait(1)
     end
 end
 
