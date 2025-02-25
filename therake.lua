@@ -5,21 +5,23 @@ local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 
 local function createGui()
-    -- Usuwa stare GUI, jeśli istnieje
-    local Gui = game.CoreGui:FindFirstChild("ScreenGui")
-    if Gui then
-        Gui:Destroy()
+    -- 🔹 Usuwa **wszystkie stare GUI**, jeśli istnieją
+    for _, gui in pairs(game.CoreGui:GetChildren()) do
+        if gui:IsA("ScreenGui") and gui.Name == "TherakeGUI" then
+            gui:Destroy()
+        end
     end
 
     local ScreenGui = Instance.new("ScreenGui")
-    local UICORNER1 = Instance.new("UICorner")
-    local UICORNER11 = Instance.new("UICorner")
-    local Frame = Instance.new("Frame")
-    local Mode = Instance.new("TextButton")
-
+    ScreenGui.Name = "TherakeGUI" -- Teraz ma unikalną nazwę, aby łatwiej go usuwać
     ScreenGui.Parent = game.CoreGui
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     ScreenGui.ResetOnSpawn = false
+
+    local Frame = Instance.new("Frame")
+    local Mode = Instance.new("TextButton")
+    local UICORNER1 = Instance.new("UICorner")
+    local UICORNER11 = Instance.new("UICorner")
 
     Frame.Name = "Frame"
     Frame.Parent = ScreenGui
@@ -42,8 +44,8 @@ local function createGui()
     Mode.TextScaled = true
     UICORNER11.Parent = Mode
 
-    -- 🔹 Przeciąganie GUI
-    local dragging, dragInput, dragStart, startPos
+    -- 🔹 Przeciąganie GUI (teraz działa poprawnie)
+    local dragging, dragStart, startPos
 
     local function updateInput(input)
         local delta = input.Position - dragStart
@@ -78,7 +80,7 @@ local function createGui()
     return Mode
 end
 
--- 🔹 Lista trybów gry
+-- 🔹 Tryby gry
 local modeNames = {
     "BlueMoon", "BloodHour", "BlackoutHour", "BloodNight", "BruhHour", "CHAOS_RESTRICTED_MODE",
     "CalamityPhase2", "CalamityPhase3", "CalamityStart", "CorruptedHourPhase2", "DeepwaterPerdition",
@@ -121,16 +123,16 @@ local function checkGameMode(Mode)
     end
 end
 
--- 🔹 Uruchomienie GUI przy starcie gry
+-- 🔹 Uruchomienie GUI (usuwa stare przed nowym)
 local Mode = createGui()
 RunService.Heartbeat:Connect(function()
     checkGameMode(Mode)
 end)
 
--- 🔹 Obsługa respawnu gracza (żeby GUI pojawiało się po śmierci)
+-- 🔹 Obsługa respawnu gracza (usuwa GUI po śmierci i tworzy nowe)
 player.CharacterAdded:Connect(function()
-    task.wait(1) -- Krótkie opóźnienie, żeby GUI nie ładowało się przed postacią
-    Mode = createGui() -- Tworzy GUI ponownie
+    task.wait(1) -- Opóźnienie, żeby GUI nie ładowało się przed postacią
+    Mode = createGui() -- Tworzy nowe GUI
     RunService.Heartbeat:Connect(function()
         checkGameMode(Mode)
     end)
