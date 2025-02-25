@@ -8,7 +8,6 @@ local files = {
     "na afka telepoti.lua",
     "odległość.lua",
     "rake heal.lua",
-    "test w bloodfall.lua",
     "therake.lua",
     "tower of hell.lua",
     "wstrząs.lua"
