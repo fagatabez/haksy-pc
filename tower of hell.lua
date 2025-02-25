@@ -1,0 +1,3 @@
+game.Players.LocalPlayer.PlayerScripts.StaminaScript.MaxStamina.Value = 10000000000000000000000000000000000000000000000000000000000000000000
+game.Players.LocalPlayer.PlayerScripts.StaminaScript.RegenMoving.Value = 100000000000000000 
+game.Players.LocalPlayer.PlayerScripts.StaminaScript.RegenIdle.Value = 100000000000000000
