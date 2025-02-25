@@ -16,9 +16,11 @@ local files = {
 local loadedFiles = {} -- Przechowuje informacje o załadowanych plikach
 
 for _, file in ipairs(files) do
-    local url = "https://raw.githubusercontent.com/fagatabez/haksy/main/" .. file
-    if not loadedFiles[file] then  -- Sprawdza, czy plik już był pobrany
-        print("⏳ Pobieranie pliku: " .. file)
+    if loadedFiles[file] then
+        print("⏩ Plik " .. file .. " został już załadowany, pomijam.")
+    else
+        local url = "https://raw.githubusercontent.com/fagatabez/haksy/main/" .. file
+        print("⏳ Pobieranie pliku: " .. file .. " z URL: " .. url)
 
         local success, response = pcall(function()
             return game:HttpGet(url)
@@ -38,8 +40,6 @@ for _, file in ipairs(files) do
         else
             warn("⚠️ Błąd pobierania pliku: " .. file)
         end
-    else
-        print("⏩ Plik " .. file .. " został już załadowany, pomijam.")
     end
 
     task.wait(0.5) -- Opóźnienie
