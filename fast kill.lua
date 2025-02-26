@@ -33,7 +33,6 @@ local allWeapons = {
 
 -- 🔹 Zmienna do śledzenia trybu inteligentnej zmiany broni
 local autoWeaponSwitch = false
-local lastMode = nil -- Zapamiętuje ostatni wykryty tryb, aby uniknąć spamu w konsoli
 
 -- 🔹 Funkcja do zakładania narzędzi
 local function equipTool(toolName)
@@ -68,11 +67,12 @@ local function checkGameMode()
 
     if not workspace:FindFirstChild("Rake") then return end
 
+    local rake = workspace.Rake
     local currentMode = nil
     local valModeActive = false
 
     -- Sprawdza tryb w skryptach Rake
-    for _, v in ipairs(workspace.Rake:GetChildren()) do
+    for _, v in ipairs(rake:GetChildren()) do
         if v:IsA("Script") and not v.Disabled then
             for _, mode in ipairs(rareModes) do
                 if string.match(v.Name, mode) then
@@ -80,52 +80,47 @@ local function checkGameMode()
                     break
                 end
             end
-            for _, valMode in ipairs(rareModesVal) do
-                if string.match(v.Name, valMode) then
-                    valModeActive = true
-                    break
-                end
-            end
         end
     end
 
-    -- 🔹 Jeśli tryb Val został włączony -> Zdejmuje lasery i zakłada wszystkie bronie
-    if valModeActive then
-        if lastMode ~= "VAL_ACTIVE" then -- Unikamy spamu w konsoli
-            lastMode = "VAL_ACTIVE"
-            unequipAllTools()
-            for _, weapon in ipairs(allWeapons) do
-                equipTool(weapon)
-            end
-            print("🟢 Tryb Val aktywny - Zakładam wszystkie bronie!")
+    -- Sprawdza, czy któryś z Val jest aktywny
+    for _, valMode in ipairs(rareModesVal) do
+        local val = rake:FindFirstChild(valMode) -- Sprawdza w modelu Rake, a nie w workspace
+        if val and val:IsA("BoolValue") and val.Value == true then
+            valModeActive = true
+            break
         end
+    end
 
     -- 🔹 Jeśli wykryto rzadki tryb -> Zdejmuje bronie i zakłada lasery
-    elseif currentMode then
-        if lastMode ~= currentMode then -- Unikamy spamu w konsoli
-            lastMode = currentMode
-            unequipAllTools()
-            for _, weapon in ipairs(laserWeapons) do
-                equipTool(weapon)
-            end
-            print("🔴 Rzadki tryb wykryty: " .. currentMode .. " - Zakładam lasery!")
+    if currentMode and not valModeActive then
+        unequipAllTools()
+        for _, weapon in ipairs(laserWeapons) do
+            equipTool(weapon)
         end
 
-    else
-        lastMode = nil
+    -- 🔹 Jeśli tryb Val został włączony -> Zdejmuje lasery i zakłada wszystkie bronie
+    elseif valModeActive then
+        unequipAllTools()
+        for _, weapon in ipairs(allWeapons) do
+            equipTool(weapon)
+        end
     end
 end
 
 -- 🔹 Sprawdza tryb co sekundę, jeśli inteligentne zmienianie jest włączone
 RunService.Heartbeat:Connect(checkGameMode)
 
--- 🔹 Nasłuchiwanie na zmiany wartości Val
-for _, valMode in ipairs(rareModesVal) do
-    local val = workspace:FindFirstChild(valMode)
-    if val and val:IsA("BoolValue") then
-        val:GetPropertyChangedSignal("Value"):Connect(function()
-            checkGameMode()
-        end)
+-- 🔹 Nasłuchiwanie na zmiany wartości Val w Rake
+if workspace:FindFirstChild("Rake") then
+    local rake = workspace.Rake
+    for _, valMode in ipairs(rareModesVal) do
+        local val = rake:FindFirstChild(valMode)
+        if val and val:IsA("BoolValue") then
+            val:GetPropertyChangedSignal("Value"):Connect(function()
+                checkGameMode()
+            end)
+        end
     end
 end
 
@@ -164,7 +159,6 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         for _, weapon in ipairs(allWeapons) do
             equipTool(weapon)
         end
-        print("🔄 Inteligentne zmienianie broni WŁĄCZONE! Założono wszystkie bronie.")
     end
 end)
 
@@ -175,7 +169,6 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if input.KeyCode == Enum.KeyCode.G then
         autoWeaponSwitch = false
         unequipAllTools() -- Zdejmuje wszystkie bronie po wyłączeniu trybu
-        print("⛔ Inteligentne zmienianie broni WYŁĄCZONE! Wszystkie bronie zdjęte.")
     end
 end)
 
