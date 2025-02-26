@@ -7,7 +7,7 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
 -- Lista trybów gry
-local rareModes = {"BlackoutHour", "BloodNight", "CalamityStart", "CarnageHour", "ChaosHour", "DeepwaterPerdition", "FinalHour", "FrozenDeath", "GlitchHour", "InfernoHour", "LowtiergodHour", "CorruptedHour", "oldBN", "PureInsanity", "ShadowHour", "VoidHour", "VisionHour"}
+local rareModes = {"BlackoutHour", "BloodNight", "CalamityStart", "CarnageHour", "CHAOS_RESTRICTED_MODE", "DeepwaterPerdition", "FinalHour", "FrozenDeath", "GlitchHour", "InfernoHour", "LowtiergodHour", "CorruptedHour", "oldBN", "PureInsanity", "ShadowHour", "VoidHour", "VisionHour"}
 local rareModesVal = {"BlackoutHourVal", "BloodNightVal", "CalamityHourVal", "CarnageHourVal", "ChaosHourVal", "DWPVal", "FinalHourVal", "FrozenDeathVal", "GlitchHourVal", "InfernoHourVal", "LowtierVal", "MikeHourVal", "OLDBNVal", "PureInsanityVal", "ShadowHourVal", "VoidHourVal", "VisionHourVal"}
 
 -- Lista broni
