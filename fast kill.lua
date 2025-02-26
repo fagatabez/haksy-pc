@@ -8,16 +8,16 @@ local RunService = game:GetService("RunService")
 
 -- 🔹 Lista rzadkich trybów
 local rareModes = {
-    "BlackoutHour", "BloodNight", "CalamityHour", "CarnageHour", "ChaosHour",
-    "DWP", "FinalHour", "FrozenDeath", "GlitchHour", "InfernoHour",
-    "LowtiergodHour", "MikeHour", "OLDBN", "PureInsanity", "ShadowHour", "VisionHour"
+    "BlackoutHour", "BloodNight", "CalamityStart", "CarnageHour", "ChaosHour",
+    "DeepwaterPerdition", "FinalHour", "FrozenDeath", "GlitchHour", "InfernoHour",
+    "LowtiergodHour", "CorruptedHour", "oldBN", "PureInsanity", "ShadowHour", "VoidHour","VisionHour"
 }
 
 -- 🔹 Lista rzadkich trybów z "Val"
 local rareModesVal = {
     "BlackoutHourVal", "BloodNightVal", "CalamityHourVal", "CarnageHourVal", "ChaosHourVal",
     "DWPVal", "FinalHourVal", "FrozenDeathVal", "GlitchHourVal", "InfernoHourVal",
-    "LowtierVal", "MikeHourVal", "OLDBNVal", "PureInsanityVal", "ShadowHourVal", "VisionHourVal"
+    "LowtierVal", "MikeHourVal", "OLDBNVal", "PureInsanityVal", "ShadowHourVal", "VoidHourVal","VisionHourVal"
 }
 
 -- 🔹 Lista broni laserowych
