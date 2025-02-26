@@ -33,6 +33,7 @@ local allWeapons = {
 
 -- 🔹 Zmienna do śledzenia trybu inteligentnej zmiany broni
 local autoWeaponSwitch = false
+local lastMode = nil -- Zapamiętuje ostatni wykryty tryb, aby uniknąć spamu w konsoli
 
 -- 🔹 Funkcja do zakładania narzędzi
 local function equipTool(toolName)
@@ -88,26 +89,45 @@ local function checkGameMode()
         end
     end
 
-    -- 🔹 Jeśli wykryto rzadki tryb -> Zdejmuje bronie i zakłada lasery
-    if currentMode and not valModeActive then
-        unequipAllTools()
-        for _, weapon in ipairs(laserWeapons) do
-            equipTool(weapon)
-        end
-        print("🔴 Rzadki tryb wykryty: " .. currentMode .. " - Zakładam lasery!")
-
     -- 🔹 Jeśli tryb Val został włączony -> Zdejmuje lasery i zakłada wszystkie bronie
-    elseif valModeActive then
-        unequipAllTools()
-        for _, weapon in ipairs(allWeapons) do
-            equipTool(weapon)
+    if valModeActive then
+        if lastMode ~= "VAL_ACTIVE" then -- Unikamy spamu w konsoli
+            lastMode = "VAL_ACTIVE"
+            unequipAllTools()
+            for _, weapon in ipairs(allWeapons) do
+                equipTool(weapon)
+            end
+            print("🟢 Tryb Val aktywny - Zakładam wszystkie bronie!")
         end
-        print("🟢 Tryb Val aktywny - Zakładam wszystkie bronie!")
+
+    -- 🔹 Jeśli wykryto rzadki tryb -> Zdejmuje bronie i zakłada lasery
+    elseif currentMode then
+        if lastMode ~= currentMode then -- Unikamy spamu w konsoli
+            lastMode = currentMode
+            unequipAllTools()
+            for _, weapon in ipairs(laserWeapons) do
+                equipTool(weapon)
+            end
+            print("🔴 Rzadki tryb wykryty: " .. currentMode .. " - Zakładam lasery!")
+        end
+
+    else
+        lastMode = nil
     end
 end
 
 -- 🔹 Sprawdza tryb co sekundę, jeśli inteligentne zmienianie jest włączone
 RunService.Heartbeat:Connect(checkGameMode)
+
+-- 🔹 Nasłuchiwanie na zmiany wartości Val
+for _, valMode in ipairs(rareModesVal) do
+    local val = workspace:FindFirstChild(valMode)
+    if val and val:IsA("BoolValue") then
+        val:GetPropertyChangedSignal("Value"):Connect(function()
+            checkGameMode()
+        end)
+    end
+end
 
 -- 🔹 Obsługa klawisza "E" do zakładania wszystkich narzędzi (bez aktywacji)
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
