@@ -6,46 +6,68 @@ repeat wait() until character and character:FindFirstChild("Humanoid")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
--- Lista trybów gry
-local rareModes = {"BlackoutHour", "BloodNight", "CalamityStart", "CarnageHour", "CHAOS_RESTRICTED_MODE", "DeepwaterPerdition", "FinalHour", "FrozenDeath", "GlitchHour", "InfernoHour", "LowtiergodHour", "CorruptedHour", "oldBN", "PureInsanity", "ShadowHour", "VoidHour", "VisionHour"}
-local rareModesVal = {"BlackoutHourVal", "BloodNightVal", "CalamityHourVal", "CarnageHourVal", "ChaosHourVal", "DWPVal", "FinalHourVal", "FrozenDeathVal", "GlitchHourVal", "InfernoHourVal", "LowtierVal", "MikeHourVal", "OLDBNVal", "PureInsanityVal", "ShadowHourVal", "VoidHourVal", "VisionHourVal"}
+local rareModes = {
+    "BlackoutHour", "BloodNight", "CalamityStart", "CarnageHour", "CHAOS_RESTRICTED_MODE",
+    "DeepwaterPerdition", "FinalHour", "FrozenDeath", "GlitchHour", "InfernoHour",
+    "LowtiergodHour", "CorruptedHour", "oldBN", "PureInsanity", "ShadowHour", "VoidHour", "VisionHour"
+}
 
--- Lista broni
-local laserWeapons = {"LaserVision", "OverheatedLaserVision"}
-local allWeapons = {"LightningStaff", "LightningStrikeTool", "VOLTBLADE", "UltraChain", "WinterCore", "TerrorBlade", "LaserVision", "OverheatedLaserVision", "Boom", "ReaperScythe", "ShadowBlade", "VenomScythe", "PrototypeStunStick", "StunStick", "SpectreOD", "Meteor", "Gasterblaster"}
+local rareModesVal = {
+    "BlackoutHourVal", "BloodNightVal", "CalamityHourVal", "CarnageHourVal", "ChaosHourVal",
+    "DWPVal", "FinalHourVal", "FrozenDeathVal", "GlitchHourVal", "InfernoHourVal",
+    "LowtierVal", "MikeHourVal", "OLDBNVal", "PureInsanityVal", "ShadowHourVal", "VoidHourVal", "VisionHourVal"
+}
 
-local autoWeaponSwitch = false
+local laserWeapons = { "LaserVision", "OverheatedLaserVision" }
+local allWeapons = {
+    "LightningStaff", "LightningStrikeTool", "VOLTBLADE", "UltraChain", "WinterCore",
+    "TerrorBlade", "LaserVision", "OverheatedLaserVision", "Boom",
+    "ReaperScythe", "ShadowBlade", "VenomScythe", "PrototypeStunStick",
+    "StunStick", "SpectreOD", "Meteor", "Gasterblaster"
+}
 
--- Funkcje ekwipunku
+-- 🔹 Śledzenie aktualnie założonego zestawu broni
+local currentEquippedMode = nil  -- nil = nic nie założone, "lasers" = lasery, "all" = wszystkie bronie
+
 local function equipTool(toolName)
     local backpack = player:FindFirstChild("Backpack")
     local tool = backpack and backpack:FindFirstChild(toolName)
-    if tool then tool.Parent = character end
+    if tool then
+        tool.Parent = character
+    end
 end
 
 local function unequipAllTools()
     for _, tool in ipairs(character:GetChildren()) do
-        if tool:IsA("Tool") then tool.Parent = player.Backpack end
+        if tool:IsA("Tool") then
+            tool.Parent = player.Backpack
+        end
     end
 end
 
-local function activateTool(toolName)
-    local tool = character:FindFirstChild(toolName)
-    if tool then tool:Activate() end
+local function equipTools(toolList, mode)
+    if currentEquippedMode == mode then return end  -- Jeśli już mamy ten zestaw, to nie zmieniamy
+
+    unequipAllTools()
+    for _, tool in ipairs(toolList) do
+        equipTool(tool)
+    end
+
+    currentEquippedMode = mode  -- Ustawiamy aktualny tryb broni
 end
 
--- Sprawdzenie trybu gry
 local function checkGameMode()
-    if not autoWeaponSwitch or not workspace:FindFirstChild("Rake") then return end
-    
-    local rake = workspace.Rake
-    local currentMode, valModeActive = nil, false
+    if not workspace:FindFirstChild("Rake") then return end
 
-    -- Sprawdzanie aktywnego trybu
-    for _, script in ipairs(rake:GetChildren()) do
-        if script:IsA("Script") and not script.Disabled then
+    local rake = workspace.Rake
+    local currentMode = nil
+    local valModeActive = false
+
+    -- 🔹 Sprawdza aktywny tryb (zwykły)
+    for _, v in ipairs(rake:GetChildren()) do
+        if v:IsA("Script") and not v.Disabled then
             for _, mode in ipairs(rareModes) do
-                if string.match(script.Name, mode) then
+                if string.match(v.Name, mode) then
                     currentMode = mode
                     break
                 end
@@ -53,7 +75,7 @@ local function checkGameMode()
         end
     end
 
-    -- Sprawdzanie wartości Val
+    -- 🔹 Sprawdza, czy aktywne jest Val
     for _, valMode in ipairs(rareModesVal) do
         local val = rake:FindFirstChild(valMode)
         if val and val:IsA("BoolValue") and val.Value then
@@ -62,52 +84,30 @@ local function checkGameMode()
         end
     end
 
-    if currentMode and not valModeActive then
-        unequipAllTools()
-        for _, weapon in ipairs(laserWeapons) do equipTool(weapon) end
-    elseif valModeActive then
-        unequipAllTools()
-        for _, weapon in ipairs(allWeapons) do equipTool(weapon) end
+    -- 🔹 Logika wyboru broni
+    if valModeActive then
+        equipTools(allWeapons, "all")  -- Val -> wszystkie bronie
+    elseif currentMode then
+        equipTools(laserWeapons, "lasers")  -- Rzadki tryb -> tylko lasery
+    else
+        equipTools(allWeapons, "all")  -- Normalny tryb -> wszystkie bronie
     end
 end
 
-RunService.Heartbeat:Connect(checkGameMode)
+-- 🔹 Nasłuchuje zmian trybu co sekundę (nie w każdej klatce)
+RunService.Heartbeat:Connect(function()
+    checkGameMode()
+end)
 
+-- 🔹 Nasłuchuje na zmiany Val w Rake i aktualizuje bronie tylko gdy coś się zmienia
 if workspace:FindFirstChild("Rake") then
     local rake = workspace.Rake
     for _, valMode in ipairs(rareModesVal) do
         local val = rake:FindFirstChild(valMode)
         if val and val:IsA("BoolValue") then
-            val:GetPropertyChangedSignal("Value"):Connect(checkGameMode)
+            val:GetPropertyChangedSignal("Value"):Connect(function()
+                checkGameMode()
+            end)
         end
     end
 end
-
--- Obsługa klawiszy
-local function handleInput(input, gameProcessed)
-    if gameProcessed then return end
-    
-    if input.KeyCode == Enum.KeyCode.E and not autoWeaponSwitch then
-        unequipAllTools()
-        for _, weapon in ipairs(allWeapons) do equipTool(weapon) end
-    elseif input.KeyCode == Enum.KeyCode.R and not autoWeaponSwitch then
-        unequipAllTools()
-        wait(0.1)
-        for _, weapon in ipairs(laserWeapons) do equipTool(weapon) end
-    elseif input.KeyCode == Enum.KeyCode.F then
-        autoWeaponSwitch = true
-        unequipAllTools()
-        for _, weapon in ipairs(allWeapons) do equipTool(weapon) end
-    elseif input.KeyCode == Enum.KeyCode.G then
-        autoWeaponSwitch = false
-        unequipAllTools()
-    end
-end
-
-UserInputService.InputBegan:Connect(handleInput)
-
--- Aktywowanie broni po kliknięciu LMB
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed or input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
-    for _, weapon in ipairs(allWeapons) do activateTool(weapon) end
-end)
