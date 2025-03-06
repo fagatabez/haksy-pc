@@ -1,113 +1,96 @@
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 
+-- Czekamy, aż postać zostanie w pełni załadowana
 repeat wait() until character and character:FindFirstChild("Humanoid")
 
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-
-local rareModes = {
-    "BlackoutHour", "BloodNight", "CalamityStart", "CarnageHour", "CHAOS_RESTRICTED_MODE",
-    "DeepwaterPerdition", "FinalHour", "FrozenDeath", "GlitchHour", "InfernoHour",
-    "LowtiergodHour", "CorruptedHour", "oldBN", "PureInsanity", "ShadowHour", "VoidHour", "VisionHour"
-}
-
-local rareModesVal = {
-    "BlackoutHourVal", "BloodNightVal", "CalamityHourVal", "CarnageHourVal", "ChaosHourVal",
-    "DWPVal", "FinalHourVal", "FrozenDeathVal", "GlitchHourVal", "InfernoHourVal",
-    "LowtierVal", "MikeHourVal", "OLDBNVal", "PureInsanityVal", "ShadowHourVal", "VoidHourVal", "VisionHourVal"
-}
-
-local laserWeapons = { "LaserVision", "OverheatedLaserVision" }
-local allWeapons = {
-    "LightningStaff", "LightningStrikeTool", "VOLTBLADE", "UltraChain", "WinterCore",
-    "TerrorBlade", "LaserVision", "OverheatedLaserVision", "Boom",
-    "ReaperScythe", "ShadowBlade", "VenomScythe", "PrototypeStunStick",
-    "StunStick", "SpectreOD", "Meteor", "Gasterblaster"
-}
-
--- 🔹 Śledzenie aktualnie założonego zestawu broni
-local currentEquippedMode = nil  -- nil = nic nie założone, "lasers" = lasery, "all" = wszystkie bronie
-
+-- Funkcja do zakładania narzędzi
 local function equipTool(toolName)
     local backpack = player:FindFirstChild("Backpack")
     local tool = backpack and backpack:FindFirstChild(toolName)
+
     if tool then
-        tool.Parent = character
+        tool.Parent = character -- Przenosi narzędzie do postaci, zakładając je
     end
 end
 
+-- Funkcja do zdejmowania wszystkich narzędzi
 local function unequipAllTools()
     for _, tool in ipairs(character:GetChildren()) do
         if tool:IsA("Tool") then
-            tool.Parent = player.Backpack
+            tool.Parent = player.Backpack -- Przenosi narzędzia do plecaka
         end
     end
 end
 
-local function equipTools(toolList, mode)
-    if currentEquippedMode == mode then return end  -- Jeśli już mamy ten zestaw, to nie zmieniamy
-
-    unequipAllTools()
-    for _, tool in ipairs(toolList) do
-        equipTool(tool)
-    end
-
-    currentEquippedMode = mode  -- Ustawiamy aktualny tryb broni
-end
-
-local function checkGameMode()
-    if not workspace:FindFirstChild("Rake") then return end
-
-    local rake = workspace.Rake
-    local currentMode = nil
-    local valModeActive = false
-
-    -- 🔹 Sprawdza aktywny tryb (zwykły)
-    for _, v in ipairs(rake:GetChildren()) do
-        if v:IsA("Script") and not v.Disabled then
-            for _, mode in ipairs(rareModes) do
-                if string.match(v.Name, mode) then
-                    currentMode = mode
-                    break
-                end
-            end
-        end
-    end
-
-    -- 🔹 Sprawdza, czy aktywne jest Val
-    for _, valMode in ipairs(rareModesVal) do
-        local val = rake:FindFirstChild(valMode)
-        if val and val:IsA("BoolValue") and val.Value then
-            valModeActive = true
-            break
-        end
-    end
-
-    -- 🔹 Logika wyboru broni
-    if valModeActive then
-        equipTools(allWeapons, "all")  -- Val -> wszystkie bronie
-    elseif currentMode then
-        equipTools(laserWeapons, "lasers")  -- Rzadki tryb -> tylko lasery
-    else
-        equipTools(allWeapons, "all")  -- Normalny tryb -> wszystkie bronie
+-- Funkcja do aktywowania narzędzi
+local function activateTool(toolName)
+    local tool = character:FindFirstChild(toolName)
+    if tool then
+        tool:Activate() -- Aktywuje narzędzie
     end
 end
 
--- 🔹 Nasłuchuje zmian trybu co sekundę (nie w każdej klatce)
-RunService.Heartbeat:Connect(function()
-    checkGameMode()
+-- Obsługa klawisza "E" do zakładania wszystkich narzędzi (bez aktywacji)
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    
+    if input.KeyCode == Enum.KeyCode.E then
+        -- Zakładamy wszystkie narzędzia, ale nie aktywujemy ich od razu
+        equipTool("LightningStaff")
+        equipTool("LightningStrikeTool")
+        equipTool("VOLTBLADE")
+        equipTool("UltraChain")
+        equipTool("WinterCore")
+        equipTool("TerrorBlade")
+        equipTool("LaserVision")
+        equipTool("OverheatedLaserVision")
+        equipTool("Boom")
+        equipTool("ReaperScythe")
+        equipTool("ShadowBlade")
+        equipTool("VenomScythe")
+        equipTool("PrototypeStunStick")
+        equipTool("StunStick")
+        equipTool("SpectreOD")
+        equipTool("Meteor")
+        equipTool("Gasterblaster")
+    end
 end)
 
--- 🔹 Nasłuchuje na zmiany Val w Rake i aktualizuje bronie tylko gdy coś się zmienia
-if workspace:FindFirstChild("Rake") then
-    local rake = workspace.Rake
-    for _, valMode in ipairs(rareModesVal) do
-        local val = rake:FindFirstChild(valMode)
-        if val and val:IsA("BoolValue") then
-            val:GetPropertyChangedSignal("Value"):Connect(function()
-                checkGameMode()
-            end)
-        end
+-- Obsługa klawisza "R" do zdejmowania wszystkich narzędzi i zakładania tylko LaserVision i OverheatedLaserVision
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    
+    if input.KeyCode == Enum.KeyCode.R then
+        unequipAllTools() -- Najpierw zdejmujemy wszystkie narzędzia
+        wait(0.1) -- Krótka pauza, aby upewnić się, że narzędzia się odpięły
+        equipTool("LaserVision")
+        equipTool("OverheatedLaserVision")
     end
-end
+end)
+
+-- Obsługa lewego przycisku myszy (LMB) do aktywacji narzędzi, gdy są założone
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        -- Aktywuj wszystkie narzędzia założone przez "E"
+        activateTool("LightningStaff")
+        activateTool("LightningStrikeTool")
+        activateTool("VOLTBLADE")
+        activateTool("UltraChain")
+        activateTool("WinterCore")
+        activateTool("TerrorBlade")
+        activateTool("LaserVision")
+        activateTool("OverheatedLaserVision")
+        activateTool("Boom")
+        activateTool("ReaperScythe")
+        activateTool("ShadowBlade")
+        activateTool("VenomScythe")
+        activateTool("PrototypeStunStick")
+        activateTool("StunStick")
+        activateTool("SpectreOD")
+        activateTool("Meteor")
+        activateTool("Gasterblaster")
+    end
+end)
