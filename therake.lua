@@ -87,6 +87,7 @@ local modeNames = {
     "FinalHour", "FrozenDeath", "GlitchHour", "GlitchHourPhase2", "IceAge", "NightmareHour",
     "PureInsanity", "ShadowHour", "ShadowHourPhase2", "VisionHour", "VoidHour", "Thalassophobia",
     "TripleSix", "CorruptedHour", "BozosHour", "InfernoHour", "LowtiergodHour", "MeltdownHour",
+    "BloodBath", "ULTIMA",
     "Insomnia", "SkyfallHour", "Thalassophobia", "oldBN", "RealityIndignation", "CarnageHour"
 }
 
