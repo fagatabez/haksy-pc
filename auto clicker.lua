@@ -2,8 +2,9 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
+local workspace = game:GetService("Workspace")
 
-local autoClick = false
+local autoDetectRake = false -- Tryb auto-ataku
 local toolsToActivate = {
     "LightningStaff",
     "LightningStrikeTool",
@@ -24,7 +25,7 @@ local toolsToActivate = {
     "Gasterblaster"
 }
 
--- Funkcja do aktywowania narzędzi
+-- 🔹 Funkcja aktywująca narzędzia
 local function activateTools()
     for _, toolName in pairs(toolsToActivate) do
         local tool = character:FindFirstChild(toolName)
@@ -34,22 +35,46 @@ local function activateTools()
     end
 end
 
--- Funkcja do klikania
-local function click()
-    while autoClick do
-        activateTools()  -- Aktywuje wszystkie narzędzia w tablicy
-        wait(0.1) -- Częstotliwość klikania
+-- 🔹 Funkcja sprawdzająca, czy Rake jest w grze i żyje
+local function isRakeAlive()
+    local rake = workspace:FindFirstChild("Rake") -- Szukamy Rake
+    if rake then
+        local humanoid = rake:FindFirstChild("NPC") -- Szukamy humanoida "NPC"
+        if humanoid and humanoid:IsA("Humanoid") then
+            return humanoid.Health > 0 -- Sprawdzamy, czy Rake żyje
+        end
+    end
+    return false
+end
+
+-- 🔹 Funkcja sprawdzająca `Rake` co sekundę
+local function checkForRake()
+    while autoDetectRake do
+        if workspace:FindFirstChild("Rake") then
+            print("👀 Wykryto Rake! Odliczam 3 sekundy...")
+            wait(3) -- Odczekanie 3 sekund przed atakiem
+            while isRakeAlive() and autoDetectRake do
+                activateTools() -- Atakujemy, jeśli Rake żyje
+                wait(0.1)
+            end
+            print("❌ Rake zniknął! Zatrzymano atak.")
+        end
+        wait(1) -- Sprawdza co sekundę, czy Rake wrócił
     end
 end
 
--- Obsługa klawiszy
+-- 🔹 Obsługa klawiszy (włączanie/wyłączanie auto-detekcji)
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
 
     if input.KeyCode == Enum.KeyCode.X then
-        autoClick = true
-        click() -- Startuje auto-klik
+        if not autoDetectRake then
+            autoDetectRake = true
+            print("🔍 Auto-atak WŁĄCZONY!")
+            checkForRake()
+        end
     elseif input.KeyCode == Enum.KeyCode.C then
-        autoClick = false -- Zatrzymuje auto-klik
+        autoDetectRake = false
+        print("⏹️ Auto-atak WYŁĄCZONY!")
     end
 end)
