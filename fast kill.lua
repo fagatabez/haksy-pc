@@ -54,6 +54,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, gameProce
         equipTool("SpectreOD")
         equipTool("Meteor")
         equipTool("Gasterblaster")
+        equipTool("Hyperblizzard")
     end
 end)
 
@@ -92,5 +93,6 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, gameProce
         activateTool("SpectreOD")
         activateTool("Meteor")
         activateTool("Gasterblaster")
+        activateTool("Hyperblizzard")
     end
 end)
