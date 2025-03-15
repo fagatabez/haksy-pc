@@ -11,6 +11,8 @@ local files = {
     "therake.lua",
     "tower of hell.lua",
     "wytrzymaj.lua",
+    "zmienrozl.lua",
+    "zmienrozb.lua",
     "wstrząs.lua"
 }
 
