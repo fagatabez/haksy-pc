@@ -1,19 +1,19 @@
 local files = {
-    "auto clicker.lua",
     "czasomierz.lua",
-    "fogrem.lua",
     "esp.lua",
-    "fast kill.lua",
     "ilość staminy.lua",
-    "na afka telepoti.lua",
     "odległość.lua",
     "rake heal.lua",
     "therake.lua",
     "tower of hell.lua",
     "wytrzymaj.lua",
-    "zmienrozl.lua",
+    "wstrząs.lua",
+    "auto clicker.lua",
+    "fogrem.lua",
+    "fast kill.lua",
+    "na afka telepoti.lua",
     "zmienrozb.lua",
-    "wstrząs.lua"
+    "zmienrozl.lua"
 }
 
 local loadedFiles = {} -- Przechowuje informacje o załadowanych plikach
