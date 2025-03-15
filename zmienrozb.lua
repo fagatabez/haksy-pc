@@ -23,8 +23,8 @@ if backpack then
     end
 
     local ultraChain = backpack:FindFirstChild("UltraChain")
-    if ultraChain and ultraChain:FindFirstChild("Chainsaw") and ultraChain.Chainsaw:FindFirstChild("Barrell") then
-        setSize(ultraChain.Chainsaw.Barrell:FindFirstChild("HitBox"), Vector3.new(ultraChain.Chainsaw.Barrell.HitBox.Size.X, 30, ultraChain.Chainsaw.Barrell.HitBox.Size.Z))
+    if ultraChain then
+        setSize(ultraChain:FindFirstChild("HitBox"), Vector3.new(ultraChain.HitBox.Size.X, 30, ultraChain.HitBox.Size.Z))
     end
 
     local venomScythe = backpack:FindFirstChild("VenomScythe")
