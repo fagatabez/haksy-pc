@@ -24,7 +24,7 @@ if backpack then
 
     local ultraChain = backpack:FindFirstChild("UltraChain")
     if ultraChain then
-        setSize(ultraChain:FindFirstChild("HitBox"), Vector3.new(ultraChain.HitBox.Size.X, 30, ultraChain.HitBox.Size.Z))
+        setSize(ultraChain:FindFirstChild("HitBox"), Vector3.new(10, 30, ultraChain.HitBox.Size.Z))
     end
 
     local venomScythe = backpack:FindFirstChild("VenomScythe")
