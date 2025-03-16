@@ -12,6 +12,10 @@ local filesSet2 = { -- 7 skryptów
     "na afka telepoti.lua", "zmienrozb.lua", "zmienrozl.lua"
 }
 
+local filesSet3 = {
+    "aiiii.lua"
+}
+
 local alwaysReloadFiles = { -- Pliki, które mają być zawsze ładowane przy "N"
     ["zmienrozb.lua"] = true,
     ["zmienrozl.lua"] = true
@@ -65,5 +69,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         loadedFiles["zmienrozb.lua"] = nil -- Resetuje status, aby wymusić ponowne ładowanie
         loadedFiles["zmienrozl.lua"] = nil
         loadScripts(filesSet2, "Zestaw 2")
+    elseif input.KeyCode == Enum.KeyCode.B then
+        loadScripts(filesSet3, "Zestaw 3")
     end
 end)
