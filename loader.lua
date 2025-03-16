@@ -91,18 +91,29 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 
     pressedKeys[input.KeyCode] = true
 
+    -- Jeśli M i N są wciśnięte jednocześnie, ładujemy tylko dec.lua i blokujemy inne skrypty
     if pressedKeys[Enum.KeyCode.M] and pressedKeys[Enum.KeyCode.N] then
-        print("🟠 Wykryto jednoczesne naciśnięcie M + N! Ładuję dec.lua")
+        print("🟠 Wykryto jednoczesne naciśnięcie M + N! Ładuję tylko dec.lua")
         loadSingleScript(decScript)
-    elseif input.KeyCode == Enum.KeyCode.M then
+        return
+    end
+
+    -- Jeśli wciśnięto tylko M (bez N)
+    if input.KeyCode == Enum.KeyCode.M and not pressedKeys[Enum.KeyCode.N] then
         print("🔵 Wczytuję zestaw 1 (8 skryptów)")
         loadScripts(filesSet1, "Zestaw 1")
-    elseif input.KeyCode == Enum.KeyCode.N then
+    end
+
+    -- Jeśli wciśnięto tylko N (bez M)
+    if input.KeyCode == Enum.KeyCode.N and not pressedKeys[Enum.KeyCode.M] then
         print("🟢 Wczytuję zestaw 2 (7 skryptów) z ponownym ładowaniem zmienrozb.lua i zmienrozl.lua")
         loadedFiles["zmienrozb.lua"] = nil -- Resetuje status, aby wymusić ponowne ładowanie
         loadedFiles["zmienrozl.lua"] = nil
         loadScripts(filesSet2, "Zestaw 2")
-    elseif input.KeyCode == Enum.KeyCode.B then
+    end
+
+    -- Wczytanie zestawu 3 po naciśnięciu B
+    if input.KeyCode == Enum.KeyCode.B then
         loadScripts(filesSet3, "Zestaw 3")
     end
 end)
