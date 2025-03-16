@@ -12,12 +12,17 @@ local filesSet2 = { -- 7 skryptów
     "na afka telepoti.lua", "zmienrozb.lua", "zmienrozl.lua"
 }
 
+local alwaysReloadFiles = { -- Pliki, które mają być zawsze ładowane przy "N"
+    ["zmienrozb.lua"] = true,
+    ["zmienrozl.lua"] = true
+}
+
 local loadedFiles = {} -- Przechowuje informacje o załadowanych plikach
 
 -- Funkcja do pobierania i ładowania skryptów
 local function loadScripts(files, setName)
     for _, file in ipairs(files) do
-        if loadedFiles[file] then
+        if loadedFiles[file] and not alwaysReloadFiles[file] then
             print("⏩ Plik " .. file .. " został już załadowany, pomijam.")
         else
             local url = "https://raw.githubusercontent.com/fagatabez/haksy/main/" .. file
@@ -56,7 +61,9 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         print("🔵 Wczytuję zestaw 1 (8 skryptów)")
         loadScripts(filesSet1, "Zestaw 1")
     elseif input.KeyCode == Enum.KeyCode.N then
-        print("🟢 Wczytuję zestaw 2 (7 skryptów)")
+        print("🟢 Wczytuję zestaw 2 (7 skryptów) z ponownym ładowaniem zmienrozb.lua i zmienrozl.lua")
+        loadedFiles["zmienrozb.lua"] = nil -- Resetuje status, aby wymusić ponowne ładowanie
+        loadedFiles["zmienrozl.lua"] = nil
         loadScripts(filesSet2, "Zestaw 2")
     end
 end)
