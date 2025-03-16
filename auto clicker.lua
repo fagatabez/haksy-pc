@@ -22,6 +22,7 @@ local toolsToActivate = {
     "StunStick",
     "SpectreOD",
     "Meteor",
+    "Super-charged Executioner",
     "Gasterblaster"
 }
 
