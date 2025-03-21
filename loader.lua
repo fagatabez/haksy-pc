@@ -20,7 +20,8 @@ local decScript = "dec.lua" -- Plik do załadowania przy M + N
 
 local alwaysReloadFiles = { -- Pliki, które mają być zawsze ładowane przy "N"
     ["zmienrozb.lua"] = true,
-    ["zmienrozl.lua"] = true
+    ["zmienrozl.lua"] = true,
+    ["tower of hell.lua"] = true
 }
 
 local loadedFiles = {} -- Przechowuje informacje o załadowanych plikach
