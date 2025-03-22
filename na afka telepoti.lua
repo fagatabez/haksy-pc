@@ -29,7 +29,7 @@ local function startTeleporting()
 
     while teleporting do
         restorePositionAndCamera() -- Przywraca pozycję i kamerę
-        wait(1) -- Teleportuj co sekundę
+        wait(0.2) -- Teleportuj co sekundę
     end
 end
 
