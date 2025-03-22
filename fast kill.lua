@@ -56,6 +56,7 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, gameProce
         equipTool("Gasterblaster")
         equipTool("Hyperblizzard")
         equipTool("Super-charged Executioner")
+        equipTool("Chaos Core")
     end
 end)
 
@@ -96,5 +97,6 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, gameProce
         activateTool("Gasterblaster")
         activateTool("Hyperblizzard")
         activateTool("Super-charged Executioner")
+        activateTool("Chaos Core")
     end
 end)
