@@ -23,7 +23,8 @@ local toolsToActivate = {
     "SpectreOD",
     "Meteor",
     "Super-charged Executioner",
-    "Gasterblaster"
+    "Gasterblaster",
+    "Chaos Core"
 }
 
 -- 🔹 Funkcja aktywująca narzędzia
