@@ -9,11 +9,11 @@ local filesSet1 = { -- 8 skryptów
 
 local filesSet2 = { -- 7 skryptów
     "wstrząs.lua", "auto clicker.lua", "fogrem.lua", "fast kill.lua", 
-    "na afka telepoti.lua", "zmienrozb.lua", "zmienrozl.lua"
+    "na afka telepoti.lua", "zmienrozb.lua", "aiiii.lua", "zmienrozl.lua"
 }
 
 local filesSet3 = {
-    "aiiii.lua"
+    
 }
 
 local decScript = "dec.lua" -- Plik do załadowania przy M + N
@@ -115,7 +115,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 
     -- Wczytanie zestawu 3 po naciśnięciu B
     if input.KeyCode == Enum.KeyCode.B then
-        loadScripts(filesSet3, "Zestaw 3")
+        print("hahahahaha idiota i debil z ciebie ")
     end
 end)
 
