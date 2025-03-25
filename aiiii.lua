@@ -10,7 +10,7 @@ local toolsToActivate = {
     "LightningStaff", "LightningStrikeTool", "VOLTBLADE", "UltraChain", "WinterCore",
     "TerrorBlade", "LaserVision", "OverheatedLaserVision", "Boom", "ReaperScythe",
     "ShadowBlade", "VenomScythe", "PrototypeStunStick", "StunStick", "SpectreOD",
-    "Meteor", "Super-charged Executioner", "Gasterblaster"
+    "Meteor", "Super-charged Executioner", "Chaos Core", "Gasterblaster"
 }
 
 local modeScripts = {
