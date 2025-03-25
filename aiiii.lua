@@ -1,5 +1,4 @@
 local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local workspace = game:GetService("Workspace")
@@ -83,6 +82,16 @@ local function updateWeapons()
     end
 end
 
+-- 🔹 Pętla sprawdzająca co 0.4 sekundy
+spawn(function()
+    while true do
+        if autoWeaponControl then
+            updateWeapons()
+        end
+        wait(0.4) -- Zamiast Heartbeat
+    end
+end)
+
 -- 🔹 Włączanie/wyłączanie skryptu
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
@@ -90,14 +99,8 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if input.KeyCode == Enum.KeyCode.F then
         autoWeaponControl = true
         print("✅ Inteligentna zmiana broni WŁĄCZONA!")
-        updateWeapons()
     elseif input.KeyCode == Enum.KeyCode.G then
         autoWeaponControl = false
         print("⛔ Inteligentna zmiana broni WYŁĄCZONA!")
     end
-end)
-
--- 🔹 Sprawdzanie co sekundę
-RunService.Heartbeat:Connect(function()
-    updateWeapons()
 end)
