@@ -27,6 +27,16 @@ local modeValues = {
     "VoidHourVal", "VisionHourVal", "ULTIMAVal", "SkyfallHourVal", "BloodBathVal"
 }
 
+-- 🔹 Funkcja zakładająca narzędzie
+local function equipTool(toolName)
+    local backpack = player:FindFirstChild("Backpack")
+    local tool = backpack and backpack:FindFirstChild(toolName)
+
+    if tool then
+        tool.Parent = character -- Przenosi narzędzie do postaci, zakładając je
+    end
+end
+
 -- 🔹 Funkcja aktywująca narzędzia
 local function activateTools()
     for _, toolName in pairs(toolsToActivate) do
