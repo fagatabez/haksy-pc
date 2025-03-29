@@ -9,7 +9,7 @@ local filesSet1 = { -- 8 skryptów
 
 local filesSet2 = { -- 7 skryptów
     "wstrząs.lua", "auto clicker.lua", "fogrem.lua", "fast kill.lua", 
-    "na afka telepoti.lua", "zmienrozb.lua", "aiiii.lua", "zmienrozl.lua"
+    "na afka telepoti.lua", "zmienrozb.lua", "aiiii.lua", "zmienrozl.lua", "op"
 }
 
 local filesSet3 = {
