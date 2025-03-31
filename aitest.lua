@@ -24,7 +24,8 @@ local allWeapons = {
     "LightningStaff", "LightningStrikeTool", "VOLTBLADE", "UltraChain", "WinterCore", "TerrorBlade",
     "LaserVision", "OverheatedLaserVision", "Boom", "ReaperScythe", "ShadowBlade", "VenomScythe",
     "PrototypeStunStick", "StunStick", "SpectreOD", "Meteor", "Gasterblaster", "Hyperblizzard",
-    "Super-charged Executioner", "Chaos Core"
+    "Super-charged Executioner", "Chaos Core", "Glock-17",
+	"Ruger SR1911", "UZI", "MAC-10", "MP5", "UMP-45"
 }
 
 local function equipTools(toolList)
