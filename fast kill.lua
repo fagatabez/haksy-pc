@@ -57,6 +57,12 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, gameProce
         equipTool("Hyperblizzard")
         equipTool("Super-charged Executioner")
         equipTool("Chaos Core")
+		equipTool("Glock-17")
+		equipTool("Ruger SR1911")
+		equipTool("UZI")
+		equipTool("MAC-10")
+		equipTool("MP5")
+		equipTool("UMP-45")
     end
 end)
 
@@ -98,5 +104,11 @@ game:GetService("UserInputService").InputBegan:Connect(function(input, gameProce
         activateTool("Hyperblizzard")
         activateTool("Super-charged Executioner")
         activateTool("Chaos Core")
+		activateTool("Glock-17")
+		activateTool("Ruger SR1911")
+		activateTool("UZI")
+		activateTool("MAC-10")
+		activateTool("MP5")
+		activateTool("UMP-45")
     end
 end)
