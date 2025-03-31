@@ -64,7 +64,7 @@ end)
 game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     
-    if input.KeyCode == Enum.KeyCode.R then
+    if input.KeyCode == Enum.KeyCode.Q then
         unequipAllTools() -- Najpierw zdejmujemy wszystkie narzędzia
         wait(0.1) -- Krótka pauza, aby upewnić się, że narzędzia się odpięły
         equipTool("LaserVision")
