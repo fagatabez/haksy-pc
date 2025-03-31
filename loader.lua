@@ -115,7 +115,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 
     -- Wczytanie zestawu 3 po naciśnięciu B
     if input.KeyCode == Enum.KeyCode.B then
-        print("hahahahaha idiota i debil z ciebie ")
+        loadScripts(filesSet3, "Zestaw 3")
     end
 end)
 
