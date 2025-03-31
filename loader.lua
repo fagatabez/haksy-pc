@@ -13,7 +13,7 @@ local filesSet2 = { -- 7 skryptów
 }
 
 local filesSet3 = {
-
+    "sciana.lua"
 }
 
 local decScript = "dec.lua" -- Plik do załadowania przy M + N
