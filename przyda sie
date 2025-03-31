@@ -1,0 +1,6 @@
+	equipTool("GLOCK-17")
+	equipTool("Ruger SR1911")
+	equipTool("UZI")
+	equipTool("MAC-10")
+	equipTool("MP5")
+	equipTool("UMP-45")
