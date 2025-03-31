@@ -16,7 +16,8 @@ local modeVals = {
     "BlackoutHourVal", "BloodNightVal", "CalamityHourVal", "CarnageHourVal", "ChaosHourVal",
     "DWPVal", "FinalHourVal", "FrozenDeathVal", "GlitchHourVal", "InfernoHourVal",
     "LowtierVal", "MikeHourVal", "OLDBNVal", "PureInsanityVal", "ShadowHourVal", "VoidHourVal", "VisionHourVal",
-    "ULTIMAVal", "SkyfallHourVal", "BloodBathVal"
+    "ULTIMAVal", "SkyfallHourVal", "BloodBathVal", "BlueScreenDeathValue", "IceAgeV", "MeltdownVal", "ShadowPhase2",
+    "ThalassophobiaV", "ULTIMAP2Val", "UltimateCalamityValue"
 }
 
 local laserWeapons = {"LaserVision", "OverheatedLaserVision"}
