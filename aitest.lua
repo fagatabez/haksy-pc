@@ -2,6 +2,7 @@ local UserInputService = game:GetService("UserInputService")
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local workspace = game:GetService("Workspace")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local autoWeaponSwitch = false -- Czy system zmiany broni jest aktywny?
 
@@ -49,10 +50,23 @@ end
 
 local function detectRakeMode()
     local rake = workspace:FindFirstChild("Rake")
-    if not rake then return end  -- Jeśli Rake nie istnieje, zakończ funkcję
-
     local modeFound = false  -- Flaga informująca, czy wykryto tryb
 
+    -- Sprawdzenie trybu CalamityStart w ReplicatedStorage
+    if replicatedStorage:FindFirstChild("ModeValues") and replicatedStorage.ModeValues:FindFirstChild("Values") then
+        local calamityValue = replicatedStorage.ModeValues.Values:FindFirstChild("Calamity")
+        if calamityValue and calamityValue.Value == true then
+            print("🔥 Tryb CalamityStart wykryty (przez ReplicatedStorage)")
+            modeFound = true
+            unequipAllTools()
+            equipTools(allWeapons) -- W CalamityStart tylko laserowe bronie
+            return
+        end
+    end
+
+    if not rake then return end -- Jeśli Rake nie istnieje, zakończ funkcję
+
+    -- Sprawdzenie trybów w Rake
     for _, mode in ipairs(modes) do
         if rake:FindFirstChild(mode) and rake[mode].Enabled then
             print("🔵 Tryb wykryty: " .. mode)
