@@ -11,9 +11,11 @@ userInputService.InputBegan:Connect(function(input, gameProcessed)
     
     if input.KeyCode == Enum.KeyCode.Y then
         part.CanCollide = false
+        part.Transparecy = 1
         print("Kolizja wyłączona")
     elseif input.KeyCode == Enum.KeyCode.H then
         part.CanCollide = true
+        part.Transparecy = 0
         print("Kolizja włączona")
     end
 end)
